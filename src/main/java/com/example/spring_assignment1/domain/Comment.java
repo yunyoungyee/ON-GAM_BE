@@ -1,45 +1,56 @@
 package com.example.spring_assignment1.domain;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import jakarta.persistence.*;
 import lombok.Builder;
+import lombok.Getter;
+import org.hibernate.annotations.BatchSize;
 
 import java.time.LocalDateTime;
 
-@Builder(toBuilder = true)
+@Entity
+@Getter
 public class Comment {
-    private Long postId;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "comment_id")
     private Long Id;
+
+    @Column(nullable = false)
     private String content;
+
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-    private Long userId;
-    private String commenterNickname;
 
-    public Comment(Long postId, Long Id, String content, LocalDateTime createdAt, LocalDateTime updatedAt,Long userId, String commenterNickname) {
-        this.postId = postId;
-        this.Id = Id;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "post_id")
+    private Post post;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
+
+
+
+    @Builder
+    public Comment(String content, Post post, User user) {
         this.content = content;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-        this.userId = userId;
-        this.commenterNickname = commenterNickname;
-    }
-    public Long getPostId() { return postId; }
-    public Long getId() { return Id; }
-    public String getContent() { return content; }
-    public LocalDateTime getCreatedAt() { return createdAt; }
-    public LocalDateTime getUpdatedAt() { return updatedAt; }
-    public Long getUserId() { return userId; }
-    public String getCommenterNickname() { return commenterNickname; }
+        this.post = post;
+        this.user = user;
+        this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
 
-    public Comment initId(Long id){
-        return this.toBuilder().Id(id).build();
     }
-    public Comment updateComment(String content){
-        return this.toBuilder().content(content).updatedAt(LocalDateTime.now()).build();
+
+    public Comment(){}
+
+    public void updateComment(String content) {
+        this.content = content;
+        this.updatedAt = LocalDateTime.now();
     }
 
     public boolean isMyCommentByUserId(Long currentUserId) {
-        return userId.equals(currentUserId);
+        return this.getId().equals(currentUserId);
     }
 }

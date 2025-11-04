@@ -1,41 +1,57 @@
 package com.example.spring_assignment1.domain;
 
+import jakarta.persistence.*;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
+import lombok.Generated;
+import lombok.Getter;
+import org.springframework.expression.spel.ast.NullLiteral;
 
-@Builder(toBuilder = true)
+import java.util.ArrayList;
+import java.util.List;
+
+@Entity
+@Getter
 public class User {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "user_id")
     private Long id;
+
+    @Column(nullable = false, unique = true)
     private String email;
+
+    @Column(nullable = false)
     private String password;
+
+    @Column(nullable = false, unique = true)
     private String nickname;
     private String profile_image;
 
-    public User(Long id, String email, String password, String nickname, String profile_image) {
-        this.id = id;
+    @OneToMany(mappedBy = "author")
+    private List<Post> posts = new ArrayList<>();
+
+    @Builder
+    public User(String email, String password, String nickname, String profile_image) {
         this.email = email;
         this.password = password;
         this.nickname = nickname;
         this.profile_image = profile_image;
     }
 
-    public User initId(Long id){
-        return this.toBuilder().id(id).build();
-    }
-    public User updateNickname(String nickname){
-        return this.toBuilder().nickname(nickname).build();
+    public User() {}
+
+    public void updateNickname(String nickname) {
+        this.nickname = nickname;
     }
 
-    public User updatePassword(String password){
-        return this.toBuilder().password(password).build();
+    public void updatePassword(String password) {
+        this.password = password;
     }
 
     public boolean validatePassword(String currentPassword) {
         return password.equals(currentPassword);
     }
-
-    public Long getId() {return id;}
-    public String getEmail() {return email;}
-    public String getPassword() {return password;}
-    public String getNickname() {return nickname;}
-    public String getProfile_image() {return profile_image;}
 }

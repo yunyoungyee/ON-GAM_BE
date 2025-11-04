@@ -1,8 +1,6 @@
 package com.example.spring_assignment1.dto.post;
 
 import com.example.spring_assignment1.domain.Post;
-import com.example.spring_assignment1.domain.PostMetaInfo;
-import com.example.spring_assignment1.domain.User;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Getter;
@@ -11,16 +9,13 @@ import java.time.LocalDateTime;
 
 @Getter
 @Builder
-public class PostResponse {
+public class PostSummaryResponse {
 
     @Schema(description = "게시글 ID", example = "1")
     private Long postId;
 
     @Schema(description = "게시글 제목", example = "API 연습하기")
     private String title;
-
-    @Schema(description = "게시글 내용", example = "API 만드는 연습을 하고 있어요. 쉽지 않네요.")
-    private String content;
 
     @Schema(description = "좋아요 개수", example = "9")
     private int likes;
@@ -34,40 +29,20 @@ public class PostResponse {
     @Schema(description = "게시글 생성 시간", example = "2025-10-16T18:44:16.327059")
     private LocalDateTime createdAt;
 
-    @Schema(description = "게시글 업데이트 시간", example = "2025-10-16T18:44:16.327142")
-    private LocalDateTime updatedAt;
-
     @Schema(description = "게시글 작성자 ID", example = "1")
     private Long authorId;
 
     @Schema(description = "게시글 작성자 닉네임", example = "eric")
     private String authorNickname;
 
-    public static PostResponse from(Post post, String nickname){
-        return PostResponse.builder()
+    public static PostSummaryResponse from(Post post, long commentCount) {
+        return PostSummaryResponse.builder()
                 .postId(post.getId())
                 .title(post.getTitle())
-                .content(post.getContent())
-                .likes(0)
-                .comments(0)
-                .views(0)
-                .createdAt(post.getCreatedAt())
-                .updatedAt(post.getUpdatedAt())
-                .authorId(post.getAuthor().getId())
-                .authorNickname(nickname)
-                .build();
-    }
-
-    public static PostResponse from(Post post, long commentCount){
-        return PostResponse.builder()
-                .postId(post.getId())
-                .title(post.getTitle())
-                .content(post.getContent())
                 .likes(post.getMetaInfo().getLikes())
                 .comments(commentCount)
                 .views(post.getMetaInfo().getViews())
                 .createdAt(post.getCreatedAt())
-                .updatedAt(post.getUpdatedAt())
                 .authorId(post.getAuthor().getId())
                 .authorNickname(post.getAuthor().getNickname())
                 .build();

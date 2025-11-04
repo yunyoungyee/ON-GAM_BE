@@ -31,7 +31,7 @@ public interface UserApi {
 
     @Operation(summary = "로그아웃", description = "로그아웃을 시도합니다.")
     @ApiResponses({
-            @ApiResponse(responseCode = "200",description = "로그아웃 성공"),
+            @ApiResponse(responseCode = "204",description = "로그아웃 성공"),
             @ApiResponse(responseCode = "404",description = "존재하지 않는 사용자 에러")
     })
     ResponseEntity<BaseResponse<Void>> logout(@RequestParam Long userId);
@@ -46,14 +46,14 @@ public interface UserApi {
 
     @Operation(summary = "회원 탈퇴", description = "회원 정보를 지우고 탈퇴합니다.")
     @ApiResponses({
-            @ApiResponse(responseCode = "200",description = "탈퇴 성공"),
+            @ApiResponse(responseCode = "204",description = "탈퇴 성공"),
             @ApiResponse(responseCode = "404",description = "존재하지 않는 사용자 에러")
     })
     ResponseEntity<BaseResponse<Void>> deleteUser(@PathVariable Long id);
 
     @Operation(summary = "비밀번호 수정", description = "새로운 비밀번호로 수정합니다.")
     @ApiResponses({
-            @ApiResponse(responseCode = "200",description = "수정 성공"),
+            @ApiResponse(responseCode = "204",description = "수정 성공"),
             @ApiResponse(responseCode = "400",description = "올바르지 않은 비밀번호 에러"),
             @ApiResponse(responseCode = "404",description = "존재하지 않는 사용자 에러")
     })

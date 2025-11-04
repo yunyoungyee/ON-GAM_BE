@@ -8,52 +8,56 @@ import com.example.spring_assignment1.dto.comment.CommentRequest;
 import com.example.spring_assignment1.dto.comment.CommentResponse;
 import com.example.spring_assignment1.exception.BusinessException;
 import com.example.spring_assignment1.repository.*;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
+@RequiredArgsConstructor
 @Service
 public class CommentService {
     private final CommentRepository commentRepository;
     private final UserRepository userRepository;
     private final PostRepository postRepository;
 
-    public CommentService(CommentRepository commentRepository, UserRepository userRepository, PostRepository postRepository) {
-        this.commentRepository = commentRepository;
-        this.userRepository = userRepository;
-        this.postRepository = postRepository;
-    }
+    @Transactional
     public CommentResponse createComment(CommentRequest req) {
-        User user = userRepository.findById(req.getUserId()).orElseThrow(() -> new BusinessException(CustomResponseCode.USER_NOT_FOUND));
-        Post post = postRepository.findById(req.getPostId()).orElseThrow(() -> new BusinessException(CustomResponseCode.POST_NOT_FOUND));
-        Comment comment = new Comment(post.getId(), null, req.getContent(), LocalDateTime.now(), java.time.LocalDateTime.now(), user.getId(), user.getNickname());
-        post.increaseComments();
-        return toResponse(commentRepository.save(comment));
+        Long userId = req.getUserId();
+        Long postId = req.getPostId();
+        String nickname = userRepository.findNicknameById(userId).orElseThrow(() -> new BusinessException(CustomResponseCode.USER_NOT_FOUND));
+        User proxyUser = userRepository.getReferenceById(userId);
+        Post proxyPost = postRepository.getReferenceById(postId);
+        Comment comment = new Comment(req.getContent(), proxyPost, proxyUser);
+        Comment savedComment = commentRepository.save(comment);
+        return CommentResponse.from(savedComment, nickname);
     }
 
+    @Transactional
     public List<CommentResponse> getCommentsByPost(Long postId) {
-        postRepository.findById(postId).orElseThrow(() -> new BusinessException(CustomResponseCode.POST_NOT_FOUND));
-        return commentRepository.findByPostId(postId).stream().map(this::toResponse).toList();
+        if(!postRepository.existsById(postId)) {
+            throw new BusinessException(CustomResponseCode.POST_NOT_FOUND);
+        }
+        List<Comment> comments = commentRepository.findALlByPostId(postId);
+        return comments.stream().map(comment-> CommentResponse.from(comment,comment.getUser().getNickname())).toList();
     }
 
+    @Transactional
     public CommentResponse updateComment(Long id, CommentRequest req) {
-        Comment comment = commentRepository.findByCommentId(id).orElseThrow(() -> new BusinessException(CustomResponseCode.COMMENT_NOT_FOUND));
+        Comment comment = commentRepository.findById(id).orElseThrow(() -> new BusinessException(CustomResponseCode.COMMENT_NOT_FOUND));
         if(!comment.isMyCommentByUserId(req.getUserId())) {
             throw new BusinessException(CustomResponseCode.FORBIDDEN_ERROR);
         }
-        Comment updatedComment = comment.updateComment(req.getContent());
-        commentRepository.save(updatedComment);
-        return toResponse(updatedComment);
+        comment.updateComment(req.getContent());
+        return CommentResponse.from(comment);
     }
 
+    @Transactional
     public void deleteComment(Long id) {
-        commentRepository.findByCommentId(id).orElseThrow(() -> new BusinessException(CustomResponseCode.COMMENT_NOT_FOUND));
-        commentRepository.delete(id);
-    }
-
-    private CommentResponse toResponse(Comment comment) {
-        User user = userRepository.findById(comment.getUserId()).orElseThrow(() -> new BusinessException(CustomResponseCode.USER_NOT_FOUND));
-        return new CommentResponse(comment.getPostId(), comment.getId(), comment.getContent(), comment.getCreatedAt(), comment.getUpdatedAt(), comment.getUserId(), comment.getCommenterNickname());
+        if(!commentRepository.existsById(id)) {
+            throw new BusinessException(CustomResponseCode.COMMENT_NOT_FOUND);
+        }
+        commentRepository.deleteById(id);
     }
 }

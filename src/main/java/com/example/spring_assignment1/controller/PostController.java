@@ -2,9 +2,7 @@ package com.example.spring_assignment1.controller;
 
 import com.example.spring_assignment1.constant.CustomResponseCode;
 import com.example.spring_assignment1.dto.BaseResponse;
-import com.example.spring_assignment1.dto.post.GetPostsResponse;
-import com.example.spring_assignment1.dto.post.PostRequest;
-import com.example.spring_assignment1.dto.post.PostResponse;
+import com.example.spring_assignment1.dto.post.*;
 import com.example.spring_assignment1.service.PostService;
 import com.example.spring_assignment1.util.ResponseUtil;
 import org.springframework.http.ResponseEntity;
@@ -19,12 +17,12 @@ public class PostController implements PostApi {
     public PostController(PostService postService) { this.postService = postService; }
 
     @GetMapping
-    public ResponseEntity<BaseResponse<List<GetPostsResponse>>> getAllPosts() {
+    public ResponseEntity<BaseResponse<List<PostSummaryResponse>>> getAllPosts() {
         return ResponseUtil.success(postService.getAllPosts());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<BaseResponse<PostResponse>> getPost(@PathVariable Long id) {
+    public ResponseEntity<BaseResponse<PostDetailResponse>> getPost(@PathVariable Long id) {
         return ResponseUtil.success(postService.getPost(id));
     }
 
