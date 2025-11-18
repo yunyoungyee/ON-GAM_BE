@@ -4,6 +4,7 @@ import { validationPassword } from '../../shared/validation.js';
 import { getCurrentUser } from '../../shared/util.js';
 import { api } from '../../shared/api/api.js';
 import { navigate } from '../../core/router.js';
+import { createField } from '../../shared/components/formField.js';
 
 export function PasswordEditPage() {
   const fragment = document.createDocumentFragment();
@@ -103,21 +104,6 @@ export function PasswordEditPage() {
   main.appendChild(panel);
   fragment.appendChild(main);
   return fragment;
-}
-
-function createField(label, placeholder, text) {
-  const field = document.createElement('div');
-  field.className = 'form-field';
-  const labelEl = document.createElement('label');
-  labelEl.textContent = label;
-  const input = document.createElement('input');
-  input.type = 'password';
-  input.placeholder = placeholder;
-  const helper = document.createElement('span');
-  helper.className = 'helper-text';
-  helper.textContent = text;
-  field.append(labelEl, input, helper);
-  return { field, input, helper };
 }
 
 function helperText(helperField, message) {

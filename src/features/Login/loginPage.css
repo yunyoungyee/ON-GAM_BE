@@ -1,23 +1,233 @@
-.login-page {
+.login-page{
   display: flex;
   justify-content: center;
-  display: flex;
-  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  height: 80vh;
-  max-width: 400px;
-  margin: 0 auto;
+  background: linear-gradient(180deg, #ddecff 0%, #f8faff 100%);
+  height: 100vh;
+  overflow: hidden;
+  column-gap: 60px;
+  padding: 0 40px;
 }
-
+.login-page.highlight{
+    background: linear-gradient(950deg, #aeaeae 0%, #000000 100%);
+}
 .login-panel .actions {
   gap: 8px;
 }
+.login-card{
+  margin-top: -40px;
+  width: 350px;
+  padding: 40px 30px 50px;
+  background: #ffffff;
+  border-radius: 20px;
+  text-align: left;
+  z-index: 1;
+  box-shadow: 0px 12px 30px rgba(0, 0, 0, 0.08);
+}
+.login-card .title .ghost{
+  color:#ffffff;
+  margin-left: 10px;
+}
+.login-card.highlight{
+  background: #000000;
+}
+.login-card .title {
+  margin: 0;
+  font-size: 35px;
+  font-weight: 700;
+  color: #000000;
+}
+.login-card .title .highlight{
+  font-size: 35px;
+  font-weight: 700;
+  color: #f2ff66;
+}
 
-.link-to-signup {
+.login-card .title span {
+  display: inline-block;
+}
+.text{
+  text-align: right;
+  color: #ffffff;
+  font-weight: bold;
+}
+.form-field input[type="email"]{
+  width: 100%;
+  padding: 14px 16px;
+  margin-bottom: 14px;
+  border-radius: 10px;
+  border: 1px solid #d9d9d9;
+  background: #f5f7fa;
+  font-size: 15px;
+  transition: border 0.2s;
+}
+.form-field input[type="email"]:focus {
+  border-color: #7ca9ff;
+  background: white;
+  outline: none;
+}
+.form-field input[type="password"]{
+  width: 100%;
+  padding: 14px 16px;
+  margin-bottom: 14px;
+  border-radius: 10px;
+  border: 1px solid #d9d9d9;
+  background: #f5f7fa;
+  font-size: 15px;
+  transition: border 0.2s;
+}
+.form-field input[type="password"]:focus {
+  border-color: #7ca9ff;
+  background: white;
+  outline: none;
+}
+.login-card .ui-button:disabled {
+  width: 100%;
+  padding: 15px 0;
+  font-size: 16px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #b4d2ff, #a7aefd);
+  border: none;
+  color: white;
+  font-weight: 600;
+  margin-top: 10px;
+  transition: transform 0.15s ease;
+  cursor: not-allowed;
+}
+/* 호버용 css추가 */ 
+.login-card .ui-button:hover:not(:disabled) {
+  background: linear-gradient(135deg, #6da7ff, #7a85ff);
+}
+.login-card .ui-button--primary {
+  background: linear-gradient(135deg, #b4d2ff, #a7aefd);
+  color: #fff;
+}
+
+.actions .link-to-signup {
+  margin-top: 5px;
   border: none;
   background: none;
   color: var(--text-dark);
-  text-decoration: none;
   cursor: pointer;
 }
+
+.actions .link-to-signup.highlight {
+  color:#ffffff;
+}
+
+.character {
+  position: relative;
+  width: 130px;
+  height: 130px;
+}
+.character-area {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 35px;
+  padding: 20px;
+  position: relative;
+}
+
+.face {
+  position: relative;
+}
+
+
+.face.happy {
+  width: 180px;
+  height: 180px;
+  background: #f9e17b;
+  border-radius: 50%;
+  box-shadow: 0 20px 20px rgba(250,220,70,.4);
+}
+
+
+.face.sad {
+  width: 180px;
+  height: 180px;
+  background: #8eb1f5;
+  border-radius: 25px;
+  box-shadow: 0 20px 20px rgba(120,160,240,.35);
+}
+
+
+.face.angry {
+  width: 180px;
+  height: 180px;
+  background: #e66958;
+  border-radius: 50%;
+  box-shadow: 0 20px 20px rgba(220,80,50,.4);
+}
+
+
+.face.tired {
+  width: 180px;
+  height: 280px;
+  background: #c9b8e7;
+  border-radius: 40px;
+  box-shadow: 0 8px 22px rgba(180,160,220,.4);
+}
+.face.tired .eye {
+  top: 18px;
+}
+.face.tired .eye-left { left: 40px; }
+.face.tired .eye-right { right: 40px; }
+
+
+.face.anxious {
+  width: 0;
+  height: 0;
+  
+  border-left: 80px solid transparent;
+  border-right: 80px solid transparent;
+  border-bottom: 150px solid #96d5a4;
+  position: relative;
+}
+.face.anxious .eye {
+  top: 40px;
+}
+.face.anxious .eye-left { left: 10px; }
+.face.anxious .eye-right { right: 10px; }
+
+
+/* 눈 */
+.eye {
+  width: 45px;
+  height: 45px;
+  background: white;
+  border-radius: 50%;
+  position: absolute;
+  top: 55px;
+}
+
+.eye-left {
+  left: 30px;
+}
+
+.eye-right {
+  right: 30px;
+}
+
+.pupil {
+  width: 18px;
+  height: 18px;
+  background: black;
+  border-radius: 50%;
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  transition: transform 0.05s linear;
+}
+
+.devil-horn {
+  width: 32px;
+  height: 32px;
+  background: #4c3d3d;
+  clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+  position: absolute;
+  top: -5px;
+}
+
+.devil-horn.left { left: 25px; }
+.devil-horn.right { right: 25px; }

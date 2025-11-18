@@ -42,12 +42,6 @@ body {
   background: var(--bg-main);
 }
 
-main.page {
-  max-width: 960px;
-  margin: 0 auto;
-  padding: 40px 24px 120px;
-}
-
 section.panel {
   width: 100%;
   background: var(--bg-panel);
