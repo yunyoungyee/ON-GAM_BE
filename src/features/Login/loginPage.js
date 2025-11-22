@@ -19,7 +19,7 @@ export function LoginPage() {
   mini2.textContent = 'ON';
   const mini3 = document.createElement('span');
   mini3.className = 'ghost';
-  mini3.textContent =': 溫';
+  mini3.textContent =': 溫 感';
   title.append(mini1,mini2,mini3);
 
   const text = document.createElement('div');

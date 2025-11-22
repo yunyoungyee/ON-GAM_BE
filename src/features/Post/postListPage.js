@@ -34,9 +34,6 @@ export function PostListPage(){
   const PostListContainer = document.createElement('main');
   PostListContainer.className = 'page post-list-page';
   PostListContainer.innerHTML=`
-    <section class="post-list__intro">
-      
-    </section>
     <p id="intro-text">
       안녕하세요,<br/>
       아무 말 대잔치 <span class="hightlight">게시판</span> 입니다.
