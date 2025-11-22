@@ -52,10 +52,11 @@ public class Post {
     }
     public Post(){}
 
-    public void updatePost(String title, String content){
+    public void updatePost(String title, String content, String postImage) {
         this.title = title;
         this.content = content;
         this.updatedAt = LocalDateTime.now();
+        this.postImage = postImage;
     }
 
     public boolean isMyPostByUserId(Long currentUserId) {

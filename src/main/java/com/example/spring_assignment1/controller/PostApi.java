@@ -43,7 +43,10 @@ public interface PostApi {
             @ApiResponse(responseCode = "403",description = "사용자 권한 인가 실패 에러"),
             @ApiResponse(responseCode = "404",description = "존재하지 않는 게시글 에러")
     })
-    ResponseEntity<BaseResponse<PostResponse>> updatePost(@PathVariable Long id, @RequestBody PostRequest request);
+    ResponseEntity<BaseResponse<PostResponse>> updatePost(
+            @PathVariable Long id,
+            @Valid @RequestPart("data") PostRequest request,
+            @RequestPart(value = "postImage")MultipartFile postImage);
 
     @Operation(summary = "게시글 삭제", description = "게시글을 삭제합니다.")
     @ApiResponses({

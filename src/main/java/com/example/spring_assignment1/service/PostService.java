@@ -54,12 +54,13 @@ public class PostService {
     }
 
     @Transactional
-    public PostResponse updatePost(Long id, PostRequest req) {
+    public PostResponse updatePost(Long id, PostRequest req, MultipartFile postImage) {
+        String postImageURL = imageService.uploadImage(postImage);
         Post post = postRepository.findById(id).orElseThrow(() -> new BusinessException(CustomResponseCode.POST_NOT_FOUND));
         if(!post.isMyPostByUserId(req.getUserId())) {
             throw new BusinessException(CustomResponseCode.FORBIDDEN_ERROR);
         }
-        post.updatePost(req.getTitle(), req.getContent());
+        post.updatePost(req.getTitle(), req.getContent(),postImageURL);
         long commentCount = commentRepository.countByPostId(post.getId());
         return PostResponse.from(post, commentCount);
     }

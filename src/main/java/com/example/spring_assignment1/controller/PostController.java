@@ -36,9 +36,12 @@ public class PostController implements PostApi {
         return ResponseUtil.success(CustomResponseCode.CREATED, postService.createPost(request, postImage));
     }
 
-    @PatchMapping("/{id}")
-    public ResponseEntity<BaseResponse<PostResponse>> updatePost(@PathVariable Long id, @RequestBody PostRequest request) {
-        return ResponseUtil.success(postService.updatePost(id, request));
+    @PatchMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<BaseResponse<PostResponse>> updatePost(
+            @PathVariable Long id,
+            @Valid @RequestPart("data") PostRequest request,
+            @RequestPart(value = "postImage")MultipartFile postImage) {
+        return ResponseUtil.success(postService.updatePost(id, request, postImage));
     }
 
     @DeleteMapping("/{id}")
