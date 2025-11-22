@@ -6,7 +6,6 @@ import { api } from '../../shared/api/api.js';
 
 export function SignupPage() {
   const fragment = document.createDocumentFragment();
-  fragment.appendChild(createHeader({ showBack: true, showProfile:false}));
 
   const signupContainer = document.createElement('main');
   signupContainer.className = 'page signup-page';
@@ -15,8 +14,14 @@ export function SignupPage() {
     <section class="panel signup-panel tablet-only">
       <h1 class="page-title">회원가입</h1>
 
-      <div class="profile-placeholder">+</div>
-      <span class="helper-text profile-helper"></span>
+      <div class="profile-upload-wrapper">
+        <input type="file" id="profileImage" accept="image/*" style="display: none;" />
+        <div class="profile-placeholder" id="profilePlaceholder">
+          <span class="plus-icon">+</span>
+        </div>
+        <img id="profilePreview" class="profile-preview"/>
+      </div>
+      <span class="helper-text" id="profileHelper"></span>
 
       <form class="form-stack" id="signup-form">
         <div class="form-field">
@@ -53,19 +58,61 @@ export function SignupPage() {
   const toLoginBtn = signupContainer.querySelector('.link-to-login');
   const $ = (id) => signupContainer.querySelector(`#${id}`);
 
+  const profileImageInput = $('profileImage');
+  const profilePlaceholder = $('profilePlaceholder');
+  const profilePreview = $('profilePreview');
+  let selectedFile = null;
+
   const inputs = {
-    email: signupContainer.querySelector('#email'),
-    password: signupContainer.querySelector('#password'),
-    pwCheck: signupContainer.querySelector('#pwCheck'),
-    nickname: signupContainer.querySelector('#nickname'),
+    email: $('email'),
+    password: $('password'),
+    pwCheck: $('pwCheck'),
+    nickname: $('nickname'),
+    profile: $('file'),
   };
-  
+
   const helpers = {
     email: $('emailHelper'),
     password: $('passwordHelper'),
     pwCheck: $('pwCheckHelper'),
     nickname: $('nicknameHelper'),
+    profile: $('profileHelper'),
   };
+
+  profilePlaceholder.addEventListener('click', () => {
+    profileImageInput.click();
+  });
+  profilePreview.addEventListener('click', () => {
+    profileImageInput.click();
+  });
+
+  profileImageInput.addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      if (!file.type.startsWith('image/')) {
+        profileHelper.textContent = '*이미지 파일만 업로드 가능합니다.';
+        e.target.value = '';
+        selectedFile = null;
+        return;
+      }
+      if (file.size > 10 * 1024 * 1024) {
+        profileHelper.textContent = '*이미지 크기는 10MB를 초과할 수 없습니다.';
+        e.target.value = '';
+        selectedFile = null;
+        return;
+      }
+      selectedFile = file;
+
+      const preview = new FileReader();
+      preview.onload = (e) => {
+        profilePreview.src = e.target.result;
+        profilePreview.classList.add('active');
+        profilePlaceholder.classList.add('active');
+      };
+      preview.readAsDataURL(file);
+      updateBtnState();
+    }
+  });
 
   const signupBtn = createButton({
     label: '회원가입',
@@ -114,8 +161,8 @@ export function SignupPage() {
 
   function updateBtnState() {
     const isValid = Object.entries(validation).every(([field, valid]) =>
-      valid.validator(inputs[field].value.trim())
-    );
+      valid.validator(inputs[field].value.trim())) && selectedFile !== null;
+
     signupBtn.classList.toggle('active', isValid);
     signupBtn.disabled = !isValid;
   }
@@ -138,7 +185,7 @@ export function SignupPage() {
     inputs[field].addEventListener('input', () => handleInput(field));
   });
 
-  signupForm.addEventListener('submit', async(e) => {
+  signupForm.addEventListener('submit', async (e) => {
     e.preventDefault();
 
     const email = inputs.email.value.trim();
@@ -149,15 +196,18 @@ export function SignupPage() {
       alert('입력값을 확인해주세요.');
       return;
     }
+    if (!selectedFile){
+      alert('프로필 이미지를 확인해주세요.');
+    }
 
-    try{
+    try {
       //TODO: profileImage 구현하기
       const profileImage = 'fake_img.jpg'; // 임시 이미지 경로
-      console.log('회원가입 시도:', { email, password, nickname, profileImage});
-      const result = await api.signup({email, password, nickname, profileImage});
+      console.log('회원가입 시도:', { email, password, nickname, profileImage: selectedFile.name });
+      const result = await api.signup({ email, password, nickname, profileImage: selectedFile });
       console.log('회원가입 성공', result);
       navigate('/login');
-    } catch(error){
+    } catch (error) {
       console.error('회원가입 실패', error.message)
       alert('프로필 이미지와 이메일, 비밀번호, 닉네임을 확인해주세요');
     }

@@ -1,19 +1,54 @@
 .signup-page {
   display: flex;
   justify-content: center;
+  background: linear-gradient(180deg, #ddecff 0%, #f8faff 100%);
+}
+
+.profile-upload-wrapper {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  margin: 20px auto;
 }
 
 .profile-placeholder {
-  width: 120px;
-  height: 120px;
+  width: 100%;
+  height: 100%;
+  border: 2px dashed #ccc;
   border-radius: 50%;
-  border: 2px dashed #bfbfd1;
-  margin: 0 auto 8px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 42px;
-  color: #bfbfd1;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.profile-placeholder:hover {
+  border-color: #666;
+  background-color: #f5f5f5;
+}
+
+.profile-placeholder.active{
+  display: none;
+}
+
+.profile-preview.active{
+  display: block;
+}
+
+.plus-icon {
+  font-size: 48px;
+  color: #ccc;
+}
+
+.profile-preview {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  cursor: pointer;
+  border: 2px solid #ddd;
+  display: none;
 }
 
 .link-to-login {
@@ -22,4 +57,21 @@
   color: var(--text-dark);
   text-decoration: underline;
   cursor: pointer;
+}
+
+.form-field input[type="text"] {
+  width: 100%;
+  padding: 14px 16px;
+  margin-bottom: 14px;
+  border-radius: 10px;
+  border: 1px solid #d9d9d9;
+  background: #f5f7fa;
+  font-size: 15px;
+  transition: border 0.2s;
+}
+
+.form-field input[type="text"]:focus {
+  border-color: #7ca9ff;
+  background: white;
+  outline: none;
 }
