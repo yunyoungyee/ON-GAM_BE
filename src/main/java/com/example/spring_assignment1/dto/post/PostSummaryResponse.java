@@ -35,6 +35,9 @@ public class PostSummaryResponse {
     @Schema(description = "게시글 작성자 닉네임", example = "eric")
     private String authorNickname;
 
+    @Schema(description = "프로필 이미지 URL", example = "/images/abc.png")
+    private String profileImageUrl;
+
     public static PostSummaryResponse from(Post post, long commentCount) {
         return PostSummaryResponse.builder()
                 .postId(post.getId())
@@ -45,6 +48,7 @@ public class PostSummaryResponse {
                 .createdAt(post.getCreatedAt())
                 .authorId(post.getAuthor().getId())
                 .authorNickname(post.getAuthor().getNickname())
+                .profileImageUrl(post.getAuthor().getProfileImage())
                 .build();
     }
 }

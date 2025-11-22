@@ -29,8 +29,13 @@ public class ImageService {
             if (!Files.exists(uploadPath)){
                 Files.createDirectories(uploadPath);
             }
+            String originalFilename = file.getOriginalFilename();
+            String fileExtension = "";
 
-            String fileName = UUID.randomUUID().toString() + "-" + StringUtils.cleanPath(file.getOriginalFilename());
+            if(originalFilename !=null && originalFilename.lastIndexOf(".") != -1){
+                fileExtension = originalFilename.substring(originalFilename.lastIndexOf("."));
+            }
+            String fileName = UUID.randomUUID().toString() + fileExtension;
             Path filePath = uploadPath.resolve(fileName);
             Files.copy(file.getInputStream(), filePath,  StandardCopyOption.REPLACE_EXISTING);
             return "/images/" + fileName;

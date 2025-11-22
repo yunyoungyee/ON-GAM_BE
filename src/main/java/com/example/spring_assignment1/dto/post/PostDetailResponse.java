@@ -42,7 +42,7 @@ public class PostDetailResponse {
     private String authorNickname;
 
     @Schema(description = "게시글 이미지 URL", example = "/images/abc.png")
-    private String postImageURL;
+    private String postImageUrl;
 
     @Schema(description = "프로필 이미지 URL", example = "/images/abc.png")
     private String profileImageUrl;
@@ -59,7 +59,7 @@ public class PostDetailResponse {
                 .updatedAt(post.getUpdatedAt())
                 .authorId(post.getAuthor().getId())
                 .authorNickname(post.getAuthor().getNickname())
-                .postImageURL(post.getPostImage())
+                .postImageUrl(post.getPostImage())
                 .profileImageUrl(post.getAuthor().getProfileImage())
                 .build();
     }
