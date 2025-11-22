@@ -11,6 +11,7 @@ import com.example.spring_assignment1.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -22,6 +23,7 @@ public class PostService {
     private final PostRepository postRepository;
     private final UserRepository userRepository;
     private final CommentRepository commentRepository;
+    private final ImageService imageService;
 
 
     public List<PostSummaryResponse> getAllPosts() {
@@ -38,11 +40,15 @@ public class PostService {
     }
 
     @Transactional
-    public PostResponse createPost(PostRequest req) {
+    public PostResponse createPost(PostRequest req, MultipartFile postImage) {
+        if(postImage == null || postImage.isEmpty()) {
+            throw new BusinessException(CustomResponseCode.IMAGE_MISSING);
+        }
+        String postImageURL = imageService.uploadImage(postImage);
         Long userId = req.getUserId();
         String nickname = userRepository.findNicknameById(userId).orElseThrow(() -> new BusinessException(CustomResponseCode.USER_NOT_FOUND)); //쿼리 1개
         User proxyAuthor = userRepository.getReferenceById(userId);
-        Post post = new Post(req.getTitle(), req.getContent(), proxyAuthor); //작성자 닉네임을 보여줘야하기 때문에 필요한 객체(author) == 필요한 쿼리
+        Post post = new Post(req.getTitle(), req.getContent(), proxyAuthor, postImageURL); //작성자 닉네임을 보여줘야하기 때문에 필요한 객체(author) == 필요한 쿼리
         Post savedPost = postRepository.save(post);
         return PostResponse.from(savedPost,nickname);
     }

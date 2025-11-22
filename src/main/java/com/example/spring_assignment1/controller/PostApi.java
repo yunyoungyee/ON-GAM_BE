@@ -7,8 +7,11 @@ import com.example.spring_assignment1.util.ResponseUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.validation.Valid;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -30,7 +33,9 @@ public interface PostApi {
             @ApiResponse(responseCode = "404",description = "존재하지 않는 사용자 에러")
 
     })
-    ResponseEntity<BaseResponse<PostResponse>> createPost(@RequestBody PostRequest request);
+    ResponseEntity<BaseResponse<PostResponse>> createPost(
+            @Valid @RequestPart("data") PostRequest request,
+            @RequestPart(value = "postImage") MultipartFile postImage);
 
     @Operation(summary = "게시글 수정", description = "게시글 제목, 게시글 내용, 사용자 ID를 넣고 게시글을 수정합니다.")
     @ApiResponses({

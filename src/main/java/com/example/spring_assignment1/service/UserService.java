@@ -24,7 +24,7 @@ public class UserService {
     @Transactional
     public UserResponse signup(UserSignupRequest req, MultipartFile profileImage) {
         if(profileImage == null || profileImage.isEmpty()) {
-            throw new BusinessException(CustomResponseCode.PROFILE_IMAGE_MISSING);
+            throw new BusinessException(CustomResponseCode.IMAGE_MISSING);
         }
         String profileImageURL = imageService.uploadImage(profileImage);
         if (userRepository.existsByEmail(req.getEmail()))

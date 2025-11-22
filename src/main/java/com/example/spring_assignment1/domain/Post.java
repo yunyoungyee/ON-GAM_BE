@@ -24,6 +24,9 @@ public class Post {
     @Column(nullable = false)
     private String content;
 
+    @Column(nullable = false)
+    private String postImage;
+
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
@@ -38,10 +41,11 @@ public class Post {
     private List<Comment> comments = new ArrayList<>();
 
     @Builder
-    public Post(String title, String content, User author) {
+    public Post(String title, String content, User author, String postImage) {
         this.title = title;
         this.content = content;
         this.author = author;
+        this.postImage = postImage;
         this.createdAt = LocalDateTime.now();
         this.updatedAt = LocalDateTime.now();
         setMetaInfo(new PostMetaInfo(this));

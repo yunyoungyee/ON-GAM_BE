@@ -35,7 +35,7 @@ public class ImageService {
             Files.copy(file.getInputStream(), filePath,  StandardCopyOption.REPLACE_EXISTING);
             return "/images/" + fileName;
         }catch(IOException e){
-            throw new BusinessException(CustomResponseCode.PROFILE_IMAGE_MISSING);
+            throw new BusinessException(CustomResponseCode.IMAGE_MISSING);
         }
     }
 }

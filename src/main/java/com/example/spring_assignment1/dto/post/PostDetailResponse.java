@@ -41,6 +41,12 @@ public class PostDetailResponse {
     @Schema(description = "게시글 작성자 닉네임", example = "eric")
     private String authorNickname;
 
+    @Schema(description = "게시글 이미지 URL", example = "/images/abc.png")
+    private String postImageURL;
+
+    @Schema(description = "프로필 이미지 URL", example = "/images/abc.png")
+    private String profileImageUrl;
+
     public static PostDetailResponse from(Post post, long commentCount) {
         return PostDetailResponse.builder()
                 .postId(post.getId())
@@ -53,6 +59,8 @@ public class PostDetailResponse {
                 .updatedAt(post.getUpdatedAt())
                 .authorId(post.getAuthor().getId())
                 .authorNickname(post.getAuthor().getNickname())
+                .postImageURL(post.getPostImage())
+                .profileImageUrl(post.getAuthor().getProfileImage())
                 .build();
     }
 }

@@ -5,8 +5,11 @@ import com.example.spring_assignment1.dto.BaseResponse;
 import com.example.spring_assignment1.dto.post.*;
 import com.example.spring_assignment1.service.PostService;
 import com.example.spring_assignment1.util.ResponseUtil;
+import jakarta.validation.Valid;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -26,9 +29,11 @@ public class PostController implements PostApi {
         return ResponseUtil.success(postService.getPost(id));
     }
 
-    @PostMapping
-    public ResponseEntity<BaseResponse<PostResponse>> createPost(@RequestBody PostRequest request) {
-        return ResponseUtil.success(CustomResponseCode.CREATED, postService.createPost(request));
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<BaseResponse<PostResponse>> createPost(
+            @Valid @RequestPart("data") PostRequest request,
+            @RequestPart(value = "postImage")MultipartFile postImage) {
+        return ResponseUtil.success(CustomResponseCode.CREATED, postService.createPost(request, postImage));
     }
 
     @PatchMapping("/{id}")
