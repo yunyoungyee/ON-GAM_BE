@@ -29,12 +29,15 @@ public class CommentResponse {
     @Schema(description = "댓글 작성자 닉네임", example = "eric")
     private String commenterNickname;
 
+    @Schema(description = "profile Image URL", example = "/images/abc.png")
+    private String profileImageUrl;
+
     public static CommentResponse from(Comment comment, String nickname) {
-        return new CommentResponse(comment.getId(), comment.getContent(), comment.getCreatedAt(), comment.getUpdatedAt(), comment.getUser().getId(), nickname);
+        return new CommentResponse(comment.getId(), comment.getContent(), comment.getCreatedAt(), comment.getUpdatedAt(), comment.getUser().getId(), nickname, comment.getUser().getProfileImage());
     }
 
     public static CommentResponse from(Comment comment) {
-        return new CommentResponse(comment.getId(), comment.getContent(), comment.getCreatedAt(), comment.getUpdatedAt(), comment.getUser().getId(), null);
+        return new CommentResponse(comment.getId(), comment.getContent(), comment.getCreatedAt(), comment.getUpdatedAt(), comment.getUser().getId(), null,null);
     }
 }
 
