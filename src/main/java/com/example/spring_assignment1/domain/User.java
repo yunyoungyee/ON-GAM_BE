@@ -3,14 +3,13 @@ package com.example.spring_assignment1.domain;
 import jakarta.persistence.*;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
-import lombok.Builder;
-import lombok.Generated;
-import lombok.Getter;
+import lombok.*;
 import org.springframework.expression.spel.ast.NullLiteral;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Getter
 public class User {
@@ -28,6 +27,8 @@ public class User {
 
     @Column(nullable = false, unique = true)
     private String nickname;
+
+    @Column(nullable = false)
     private String profileImage;
 
     @OneToMany(mappedBy = "author")
@@ -40,8 +41,6 @@ public class User {
         this.nickname = nickname;
         this.profileImage = profileImage;
     }
-
-    public User() {}
 
     public void updateNickname(String nickname) {
         this.nickname = nickname;

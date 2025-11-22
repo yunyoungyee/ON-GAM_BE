@@ -10,8 +10,10 @@ import com.example.spring_assignment1.dto.user.UserNicknameUpdateRequest;
 import com.example.spring_assignment1.service.UserService;
 import com.example.spring_assignment1.util.ResponseUtil;
 import jakarta.validation.Valid;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/users")
@@ -22,9 +24,11 @@ public class UserController implements UserApi {
         this.userService = userService;
     }
 
-    @PostMapping
-    public ResponseEntity<BaseResponse<UserResponse>> signup(@Valid @RequestBody UserSignupRequest request) {
-        return ResponseUtil.success(CustomResponseCode.CREATED, userService.signup(request));
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<BaseResponse<UserResponse>> signup(
+            @Valid @RequestPart("data") UserSignupRequest request,
+            @RequestPart(value = "profileImage") MultipartFile profileImage){
+        return ResponseUtil.success(CustomResponseCode.CREATED, userService.signup(request, profileImage));
     }
 
     @PostMapping("/auth")

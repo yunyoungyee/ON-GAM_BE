@@ -18,7 +18,9 @@ public class UserResponse {
     @Schema(description = "사용자 닉네임", example = "eric")
     private final String nickname;
 
+    @Schema(description = "프로필 이미지 URL", example = "/images/~~.png")
+    private final String profileImageUrl;
     public static UserResponse from(User user){
-        return new UserResponse(user.getId(), user.getEmail(), user.getNickname());
+        return new UserResponse(user.getId(), user.getEmail(), user.getNickname(), user.getProfileImage());
     }
 }

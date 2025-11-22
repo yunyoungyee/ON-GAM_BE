@@ -1,10 +1,16 @@
 package com.example.spring_assignment1.dto.user;
 
+import com.example.spring_assignment1.constant.CustomResponseCode;
+import com.example.spring_assignment1.domain.User;
+import com.example.spring_assignment1.exception.BusinessException;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import org.springframework.web.multipart.MultipartFile;
 
+@Builder
 @Getter
 @AllArgsConstructor
 public class UserSignupRequest { //@RequestBody로
@@ -21,8 +27,4 @@ public class UserSignupRequest { //@RequestBody로
     @Schema(description = "사용자 닉네임", example = "eric")
     @NotBlank
     private final String nickname;
-
-    @Schema(description = "사용자 프로필 사진", example = "https://image.kr/img.jpg")
-    @NotBlank
-    private final String profileImage;
 }

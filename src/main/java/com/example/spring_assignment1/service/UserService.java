@@ -13,19 +13,25 @@ import com.example.spring_assignment1.repository.UserRepository;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 @RequiredArgsConstructor
 @Service
 public class UserService {
     private final UserRepository userRepository;
+    private final ImageService imageService;
 
     @Transactional
-    public UserResponse signup(UserSignupRequest req) {
+    public UserResponse signup(UserSignupRequest req, MultipartFile profileImage) {
+        if(profileImage == null || profileImage.isEmpty()) {
+            throw new BusinessException(CustomResponseCode.PROFILE_IMAGE_MISSING);
+        }
+        String profileImageURL = imageService.uploadImage(profileImage);
         if (userRepository.existsByEmail(req.getEmail()))
             throw new BusinessException(CustomResponseCode.DUPLICATE_EMAIL);
         if (userRepository.existsByNickname(req.getNickname()))
             throw new BusinessException(CustomResponseCode.DUPLICATE_NICKNAME);
-        User user = new User(req.getEmail(), req.getPassword(), req.getNickname(), req.getProfileImage());
+        User user = new User(req.getEmail(), req.getPassword(), req.getNickname(), profileImageURL);
         return UserResponse.from(userRepository.save(user));
     }
 

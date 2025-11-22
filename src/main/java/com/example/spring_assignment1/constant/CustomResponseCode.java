@@ -21,6 +21,7 @@ public enum CustomResponseCode {
     COMMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "댓글을 찾을 수 없습니다."),
 
     // 공통
+    PROFILE_IMAGE_MISSING(HttpStatus.BAD_REQUEST, "이미지 등록이 필요합니다."),
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "서버 내부 오류가 발생했습니다.");
 
     private final HttpStatus status;

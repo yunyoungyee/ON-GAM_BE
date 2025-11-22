@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 public interface UserApi {
     @Operation(summary = "회원가입", description = "이메일, 닉네임, 비밀번호, 프로필 사진을 넣고 회원가입을 진행합니다.")
@@ -19,7 +20,9 @@ public interface UserApi {
             @ApiResponse(responseCode = "200",description = "회원가입 성공"),
             @ApiResponse(responseCode = "409",description = "이메일 또는 닉네임 중복 에러")
     })
-    ResponseEntity<BaseResponse<UserResponse>> signup(@Valid @RequestBody UserSignupRequest request);
+    ResponseEntity<BaseResponse<UserResponse>> signup(
+            @Valid @RequestPart("data")  UserSignupRequest request,
+            @RequestPart(value = "profileImage", required = false) MultipartFile profileImage);
 
     @Operation(summary = "로그인", description = "이메일, 비밀번호를 넣고 로그인을 시도합니다.")
     @ApiResponses({
