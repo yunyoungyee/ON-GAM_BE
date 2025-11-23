@@ -39,13 +39,16 @@ public interface UserApi {
     })
     ResponseEntity<BaseResponse<Void>> logout(@RequestParam Long userId);
 
-    @Operation(summary = "닉네임 수정", description = "새로운 닉네임으로 수정합니다.")
+    @Operation(summary = "프로필 수정", description = "닉네임 또는 프로필 이미지를 수정합니다.")
     @ApiResponses({
             @ApiResponse(responseCode = "200",description = "수정 성공"),
             @ApiResponse(responseCode = "404",description = "존재하지 않는 사용자 에러"),
             @ApiResponse(responseCode = "409",description = "닉네임 중복 에러")
     })
-    ResponseEntity<BaseResponse<UserResponse>> updateNickname(@PathVariable Long id, @RequestBody UserNicknameUpdateRequest request);
+    ResponseEntity<BaseResponse<UserResponse>> updateProfile(
+            @PathVariable Long id,
+            @Valid @RequestPart UserNicknameUpdateRequest request,
+            @RequestPart(value = "profileImage", required = false) MultipartFile profileImage);
 
     @Operation(summary = "회원 탈퇴", description = "회원 정보를 지우고 탈퇴합니다.")
     @ApiResponses({

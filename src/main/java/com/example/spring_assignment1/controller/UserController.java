@@ -42,10 +42,12 @@ public class UserController implements UserApi {
         return ResponseUtil.success(CustomResponseCode.NO_CONTENT, null);
     }
 
-    @PatchMapping("/{id}/nickname")
-    public ResponseEntity<BaseResponse<UserResponse>> updateNickname(
-            @PathVariable Long id, @RequestBody UserNicknameUpdateRequest request) {
-        return ResponseUtil.success(userService.updateNickname(id, request));
+    @PatchMapping(value = "/{id}/nickname",consumes =  MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<BaseResponse<UserResponse>> updateProfile(
+            @PathVariable Long id,
+            @Valid @RequestPart("data") UserNicknameUpdateRequest request,
+            @RequestPart(value = "profileImage", required = false) MultipartFile profileImage) {
+        return ResponseUtil.success(userService.updateProfile(id, request, profileImage));
     }
 
     @DeleteMapping("/{id}")

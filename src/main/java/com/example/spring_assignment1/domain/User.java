@@ -45,6 +45,9 @@ public class User {
     public void updateNickname(String nickname) {
         this.nickname = nickname;
     }
+    public void updateProfileImage(String profileImage) {
+        this.profileImage = profileImage;
+    }
 
     public void updatePassword(String password) {
         this.password = password;
