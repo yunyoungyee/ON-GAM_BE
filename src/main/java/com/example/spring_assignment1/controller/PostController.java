@@ -40,7 +40,7 @@ public class PostController implements PostApi {
     public ResponseEntity<BaseResponse<PostResponse>> updatePost(
             @PathVariable Long id,
             @Valid @RequestPart("data") PostRequest request,
-            @RequestPart(value = "postImage")MultipartFile postImage) {
+            @RequestPart(value = "postImage", required = false)MultipartFile postImage) {
         return ResponseUtil.success(postService.updatePost(id, request, postImage));
     }
 
