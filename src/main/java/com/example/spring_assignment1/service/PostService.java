@@ -26,12 +26,14 @@ public class PostService {
     private final ImageService imageService;
 
 
+    @Transactional
     public List<PostSummaryResponse> getAllPosts() {
         return postRepository.findAll().stream().map(post-> {long commentCount = commentRepository.countByPostId(post.getId());
             return PostSummaryResponse.from(post, commentCount);
         }).toList();
     }
 
+    @Transactional
     public PostDetailResponse getPost(Long id) {
         Post post = postRepository.findById(id).orElseThrow(() -> new BusinessException(CustomResponseCode.POST_NOT_FOUND));
         long commentCount = commentRepository.countByPostId(post.getId());
@@ -55,12 +57,17 @@ public class PostService {
 
     @Transactional
     public PostResponse updatePost(Long id, PostRequest req, MultipartFile postImage) {
-        String postImageURL = imageService.uploadImage(postImage);
         Post post = postRepository.findById(id).orElseThrow(() -> new BusinessException(CustomResponseCode.POST_NOT_FOUND));
-        if(!post.isMyPostByUserId(req.getUserId())) {
-            throw new BusinessException(CustomResponseCode.FORBIDDEN_ERROR);
+        if(!req.getContent().isEmpty() && !req.getTitle().isEmpty()) {
+            if(!post.isMyPostByUserId(req.getUserId())) {
+                throw new BusinessException(CustomResponseCode.FORBIDDEN_ERROR);
+            }
+            post.updatePost(req.getTitle(), req.getContent());
         }
-        post.updatePost(req.getTitle(), req.getContent(),postImageURL);
+        if(postImage != null && !postImage.isEmpty()) {
+            String postImageURL = imageService.uploadImage(postImage);
+            post.updatePostImage(postImageURL);
+        }
         long commentCount = commentRepository.countByPostId(post.getId());
         return PostResponse.from(post, commentCount);
     }
