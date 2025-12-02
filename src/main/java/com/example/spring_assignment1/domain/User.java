@@ -31,15 +31,19 @@ public class User {
     @Column(nullable = false)
     private String profileImage;
 
+    @Column(nullable = false)
+    private String role;
+
     @OneToMany(mappedBy = "author")
     private List<Post> posts = new ArrayList<>();
 
     @Builder
-    public User(String email, String password, String nickname, String profileImage) {
+    public User(String email, String password, String nickname, String profileImage, String role) {
         this.email = email;
         this.password = password;
         this.nickname = nickname;
         this.profileImage = profileImage;
+        this.role = role;
     }
 
     public void updateNickname(String nickname) {

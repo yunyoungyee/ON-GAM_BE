@@ -20,7 +20,11 @@ public class UserResponse {
 
     @Schema(description = "프로필 이미지 URL", example = "/images/~~.png")
     private final String profileImageUrl;
+
+    @Schema(description = "권한", example = "ROLE_USER")
+    private final String role;
+
     public static UserResponse from(User user){
-        return new UserResponse(user.getId(), user.getEmail(), user.getNickname(), user.getProfileImage());
+        return new UserResponse(user.getId(), user.getEmail(), user.getNickname(), user.getProfileImage(), user.getRole());
     }
 }

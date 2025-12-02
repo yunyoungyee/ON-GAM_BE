@@ -7,11 +7,14 @@ import com.example.spring_assignment1.dto.user.UserPasswordUpdateRequest;
 import com.example.spring_assignment1.dto.user.UserResponse;
 import com.example.spring_assignment1.dto.user.UserSignupRequest;
 import com.example.spring_assignment1.dto.user.UserNicknameUpdateRequest;
+import com.example.spring_assignment1.security.CustomUserDetails;
 import com.example.spring_assignment1.service.UserService;
 import com.example.spring_assignment1.util.ResponseUtil;
 import jakarta.validation.Valid;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -60,7 +63,15 @@ public class UserController implements UserApi {
     public ResponseEntity<BaseResponse<Void>> updatePassword(
             @PathVariable Long id, @RequestBody UserPasswordUpdateRequest request) {
         userService.updatePassword(id, request);
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        CustomUserDetails userDetails = (CustomUserDetails) auth.getPrincipal();
+
+        if (!userDetails.getUser().getId().equals(id)) {
+            return ResponseUtil.error(CustomResponseCode.FORBIDDEN_ERROR);
+        }
         return ResponseUtil.success(CustomResponseCode.NO_CONTENT, null);
     }
+
+
 
 }
