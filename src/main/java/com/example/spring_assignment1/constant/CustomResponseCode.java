@@ -13,6 +13,7 @@ public enum CustomResponseCode {
     DUPLICATE_NICKNAME(HttpStatus.CONFLICT, "중복 닉네임."),
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 사용자"),
     INVALID_PASSWORD(HttpStatus.BAD_REQUEST, "비밀번호가 올바르지 않습니다."),
+    INVALID_CREDENTIALS(HttpStatus.UNAUTHORIZED, "인증에 실패하였습니다"),
 
     // 게시글 관련 에러
     POST_NOT_FOUND(HttpStatus.NOT_FOUND, "게시글을 찾을 수 없습니다."),
