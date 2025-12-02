@@ -10,6 +10,7 @@ import com.example.spring_assignment1.dto.user.UserNicknameUpdateRequest;
 import com.example.spring_assignment1.exception.BusinessException;
 
 import com.example.spring_assignment1.repository.UserRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class UserService {
     private final UserRepository userRepository;
     private final ImageService imageService;
+    private final PasswordEncoder passwordEncoder;
 
     @Transactional
     public UserResponse signup(UserSignupRequest req, MultipartFile profileImage) {
@@ -31,7 +33,7 @@ public class UserService {
             throw new BusinessException(CustomResponseCode.DUPLICATE_EMAIL);
         if (userRepository.existsByNickname(req.getNickname()))
             throw new BusinessException(CustomResponseCode.DUPLICATE_NICKNAME);
-        User user = new User(req.getEmail(), req.getPassword(), req.getNickname(), profileImageURL);
+        User user = new User(req.getEmail(), passwordEncoder.encode(req.getPassword()), req.getNickname(), profileImageURL, "ROLE_USER");
         return UserResponse.from(userRepository.save(user));
     }
 
