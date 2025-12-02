@@ -2,26 +2,21 @@ package com.example.spring_assignment1.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
-public class WebConfig implements WebMvcConfigurer {
-    @Override
-    public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**")
-                .allowedOrigins("http://127.0.0.1:5500")
-                .allowedMethods("*")
-                .allowedHeaders("*");
-    }
+public class WebMvcConfig implements WebMvcConfigurer {
 
     @Value("${file.upload-dir}")
     private String uploadDir;
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/images/**").addResourceLocations("file:" + uploadDir);
+        String baseDir = System.getProperty("user.dir");
+        String fullPath = "file:" + baseDir + "/" + uploadDir + "/";
+
+        registry.addResourceHandler("/images/**")
+                .addResourceLocations(fullPath);
     }
 }
-

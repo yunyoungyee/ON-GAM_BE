@@ -20,12 +20,13 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class ImageService {
 
-    @Value("${file.upload-dir:src/main/resources/static/images/}")
+    @Value("${file.upload-dir}")
     private String uploadDir;
 
     public String uploadImage(MultipartFile file){
         try{
-            Path uploadPath = Paths.get(uploadDir);
+            String baseDir = System.getProperty("user.dir");
+            Path uploadPath = Paths.get(baseDir, uploadDir);
             if (!Files.exists(uploadPath)){
                 Files.createDirectories(uploadPath);
             }
