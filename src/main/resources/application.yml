@@ -12,7 +12,7 @@ spring:
     resources:
       static-location: classpath:/static/
 file:
-  upload-dir: src/main/resources/static/images/
+  upload-dir: uploads/
 
   jpa:
     database-platform: org.hibernate.dialect.MySQLDialect
